@@ -3,7 +3,7 @@ Scrolling text example code
 Modified from: http://www.arduino.cc/playground/Code/PCD8544
 */
 // The pins to use on the arduino
-#define PIN_SCE   12l
+#define PIN_SCE   12
 #define PIN_RESET 11
 #define PIN_DC    7
 #define PIN_SDIN  6

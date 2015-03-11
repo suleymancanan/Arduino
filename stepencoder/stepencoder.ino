@@ -1,28 +1,8 @@
-//This is an example of how you would control 1 stepper
-
 #include <AccelStepper.h>
 
-//int motorSpeed = 9600; //maximum steps per second (about 3rps / at 16 microsteps)
 int motorSpeed = 10000; //maximum steps per second (about 5rps / at 8 microsteps)
 int motorAccel = 3600; //steps/second/second to accelerate
-/*
-int motorDirPin = 5; //digital pin 2
-int motorStepPin = 2; //digital pin 3
-const int Enable_PIN = 3;
-*/
-/*
-const unsigned char ttable[6][4] = {
-  {0x3 , 0x2, 0x1,  0x0}, {0x23, 0x0, 0x1,  0x0},
-  {0x13, 0x2, 0x0,  0x0}, {0x3 , 0x5, 0x4,  0x0},
-  {0x3 , 0x3, 0x4, 0x10}, {0x3 , 0x5, 0x3, 0x20}
-};
-*/
-/*const unsigned char ttable[7][4] = {
-  {0x0, 0x2, 0x4,  0x0}, {0x3, 0x0, 0x1, 0x10},
-  {0x3, 0x2, 0x0,  0x0}, {0x3, 0x2, 0x1,  0x0},
-  {0x6, 0x0, 0x4,  0x0}, {0x6, 0x5, 0x0, 0x10},
-  {0x6, 0x5, 0x4,  0x0},
-};*/
+
 const unsigned char ttable[7][4] = {
 {0x0, 0x2, 0x4, 0x0}, {0x3, 0x0, 0x1, 0x10},
 {0x3, 0x2, 0x0, 0x0}, {0x3, 0x2, 0x1, 0x0},
@@ -41,8 +21,6 @@ const int Enable_PIN = 10;
 AccelStepper stepper(1, motorStepPin, motorDirPin);
 volatile unsigned char state = 0;
 
-
-
 void setup(){
   stepper.setMaxSpeed(motorSpeed);
   stepper.setSpeed(motorSpeed);
@@ -59,8 +37,6 @@ void setup(){
 
 void loop(){
  int counter;
- //byte DialPos;
- //byte Last_DialPos;
  unsigned char result;
   /* Reset the counter */
  counter = 0;
@@ -73,30 +49,8 @@ void loop(){
     result=state&0x30;
     if(result==DIR_CCW) counter++;
         if(result==DIR_CW) counter--;
-    
-    /*
-    if (DialPos == 3 && Last_DialPos == 1)
-    {
-      counter--;
-    }
-  
-    /* Is the dial being turned clockwise? */
-   /*
-    if (DialPos == 3 && Last_DialPos == 2)
-    {
-      counter++;
-    }
-    */
-    
-    //Serial.println(counter);
- 
-     // if(!digitalRead(SW))
-     // Serial.println("Switch pressed!");
-  
-    /* Save the state of the encoder */
-   // Last_DialPos = DialPos;
-    //stepper.moveTo(-stepper.currentPosition());
-    stepper.moveTo(counter*10);
+ // put some magnification  hera about 10 times
+   stepper.moveTo(counter*10);
     stepper.run();
   }
 }
