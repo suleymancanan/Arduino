@@ -33,8 +33,8 @@ int motorStepPin = 8; //digital pin 3
 int motorDirPin = 9; //digital pin 2
 const int Enable_PIN = 10;
 AccelStepper stepper(1, motorStepPin, motorDirPin);
-int motorSpeed = 1000; //maximum steps per second (about 5rps / at 8 microsteps)
-int motorAccel = 1000; //steps/second/second to accelerate
+int motorSpeed = 500; //maximum steps per second (about 5rps / at 8 microsteps)
+int motorAccel = 500; //steps/second/second to accelerate
 int multiplier=0,sw=0;
 
 // -----------------------------------------------------------------------------
@@ -66,13 +66,16 @@ void setup() {
     pinMode(A0,INPUT);
     pinMode(A1,INPUT);
     pinMode(A2,INPUT);
-    pinMode(Enable_PIN, OUTPUT);
+  // pinMode(Enable_PIN, OUTPUT);
+stepper.setEnablePin(10);
+stepper.setPinsInverted(false,false,true);
+stepper.setMinPulseWidth(20);
     
     stepper.setMaxSpeed(motorSpeed);
     stepper.setSpeed(motorSpeed);
     stepper.setAcceleration(motorAccel);
     
-    digitalWrite(Enable_PIN, LOW);
+    //digitalWrite(Enable_PIN, LOW);
     attachInterrupt(0, isr, FALLING);   // interrupt 0 is always connected to pin 2 on Arduino UNO
 //    stepper.moveTo(200);
     }
@@ -82,18 +85,23 @@ void setup() {
 void loop() {
 
     int lastCount = 0;
-    
+    int toggle=0;
+stepper.disableOutputs();    
 
     while (true) {
-       /* if (!(digitalRead(PinSW))) {        // check if pushbutton is pressed
-            virtualPosition = 0;            // if YES, then reset counter to ZERO
+        if (!(digitalRead(PinSW))) {        // check if pushbutton is pressed
+            stepper.setCurrentPosition(0);
+            virtualPosition = 0;
+            toggle^=1;
+            if(toggle==1) stepper.enableOutputs(); 
+            else stepper.disableOutputs();          // if YES, then reset counter to ZERO
             while (!digitalRead(PinSW)) {}  // wait til switch is released
             delay(10);                      // debounce
             Serial.println("Reset");        // Using the word RESET instead of COUNT here to find out a buggy encoder
-            }*/
+            }
         if(digitalRead(A0)) multiplier=1;
-                if(digitalRead(A1)) multiplier=4;
-                        if(digitalRead(A2)) multiplier=16;
+                if(digitalRead(A1)) multiplier=2;
+                        if(digitalRead(A2)) multiplier=4;
         
         if (virtualPosition != lastCount) {
             lastCount = virtualPosition;
@@ -102,14 +110,20 @@ void loop() {
              //stepper.moveTo(virtualPosition);
            // Serial.println(stepper.currentPosition());
         }
-             if(!digitalRead(PinSW)) sw^=1;
-             if(sw==0){
-//              // stepper.setSpeed(1000);
+             /*
+             if(!digitalRead(PinSW))
+             {            
+             sw^=1;
+             while(!digitalRead(PinSW));
+             }
+*/
+             //if(sw==0){
+//              stepper.setSpeed(1000);
                 stepper.moveTo(virtualPosition);
 //                stepper.runSpeedToPosition();
 stepper.run();
-             }
-            
+             //}
+            /*
              if(sw==1){
                //if (stepper.distanceToGo() == 0){
                 // stepper.setSpeed(1000);
@@ -117,6 +131,7 @@ stepper.run();
               stepper.run();
           //  }
           }
+          */
             
                                   
         } // while
