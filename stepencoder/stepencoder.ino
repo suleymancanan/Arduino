@@ -32,7 +32,7 @@ void setup(){
   pinMode(DT, INPUT);   
   pinMode(CLK, INPUT);  
   pinMode(SW, INPUT);  
-  digitalWrite(SW, HIGH);
+  //digitalWrite(SW, HIGH);
 }
 
 void loop(){
@@ -49,8 +49,9 @@ void loop(){
     result=state&0x30;
     if(result==DIR_CCW) counter++;
         if(result==DIR_CW) counter--;
+        Serial.println(state);
  // put some magnification  hera about 10 times
-   stepper.moveTo(counter*10);
-    stepper.run();
+   //stepper.moveTo(counter*10);
+    //stepper.run();
   }
 }
