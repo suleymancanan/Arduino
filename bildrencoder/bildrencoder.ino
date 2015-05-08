@@ -83,7 +83,7 @@ if(homestatus==0)
 demo();
 if(homestatus)
 {
-homestate();
+gotoHome();//homestate();
 counts=0;
 }
 
@@ -130,7 +130,7 @@ void limitDW()
   digitalWrite(in2, LOW);
   analogWrite(enA, 0);
   homestatus=1;
-  //delay(1000);
+  delay(1000);
   }
 }
 void limitUP()
@@ -140,7 +140,7 @@ void limitUP()
   digitalWrite(in1, HIGH);// toward the tail
   digitalWrite(in2, LOW);
   analogWrite(enA, 130);
-  delay(1000);
+  delay(250);
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
   analogWrite(enA, 0);
@@ -149,16 +149,21 @@ void limitUP()
 //  delay(1000);
   }
 }  
+
+void gotoHome()
+{
+digitalWrite(in1, LOW);// toward motor
+digitalWrite(in2, HIGH);
+analogWrite(enA, 100);
+}
   
 void homestate()
 {
-
 //if(stp==0){
-  
-digitalWrite(in1, LOW);// toward home
+digitalWrite(in1, LOW);// toward motor
 digitalWrite(in2, HIGH);
 analogWrite(enA, 100);
-while(digitalRead(limUP)==0){Serial.println();}
+while(digitalRead(limUP)==0){}
 digitalWrite(in1, HIGH);
 digitalWrite(in2, LOW);
 //}
@@ -172,10 +177,6 @@ homestatus=0;
 
  void demo()
 {
-  //digitalWrite(in1, HIGH);
-  //digitalWrite(in2, LOW);
-  //digitalWrite(in1, LOW);
-  //digitalWrite(in2, HIGH);
  if(toggle==1){
                 digitalWrite(in1, LOW);
                 digitalWrite(in2, HIGH); 
@@ -185,9 +186,5 @@ homestatus=0;
                 digitalWrite(in2, LOW); 
             } 
   analogWrite(enA, counts);
-  //delay(50);
   
-  //digitalWrite(in1, LOW);
-  //digitalWrite(in2, LOW);
- //delay(1000); 
  }
